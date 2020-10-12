@@ -15,7 +15,7 @@ function bin2str($bin){
 	$text = array();
 	$bin = explode(' ', $bin);
 	for($i=0; count($bin)>$i; $i++)
-		$text[] = chr(bindec($bin[$i]));
+		$text[] = chr(@bindec($bin[$i]));
 	return implode($text);
 }
 
