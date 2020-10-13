@@ -10,11 +10,23 @@ function str2bin($text){
 	return implode(' ', $bin);
 }
 
+// Wrap a string with a distinct boundary
+function wrap($string) {
+	return "\xEF\xBB\xBF".$string."\xEF\xBB\xBF"; // Unicode Character 'ZERO WIDTH NON-BREAKING SPACE' (U+FEFF) 0xEF 0xBB 0xBF
+}
+
+// Unwrap a string if the distinct boundary exists
+function unwrap($string) {
+	$tmp = explode("\xEF\xBB\xBF", $string);
+	if(count($tmp) == 1) return false; // If the string doesn't contain the boundary, return false
+	return $tmp[1]; // Otherwise, return the unwrapped string
+}
+
 // Convert binary data into a string
 function bin2str($bin){
 	$text = array();
 	$bin = explode(' ', $bin);
-	for($i=0; count($bin)>$i; $i++) 
+	for($i=0; count($bin)>$i; $i++)
 		$text[] = chr(@bindec($bin[$i]));
 	return implode($text);
 }
@@ -43,14 +55,26 @@ if(!isset($_GET['public']) && !isset($_GET['private']) && !isset($_GET['decode']
 <p>Hello and thanks for your interest in this API. Here’s some quick documentation:</p>
 <h2>Encoding</h2>
 <p>You can encode messages by passing both <code>public</code> and <code>private</code> parameters, e.g.:</p>
-<blockquote><code>GET <a href="https://neatnik.net/steganographr/api?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm">https://neatnik.net/steganographr/api?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm</a></code></blockquote>
+<blockquote>
+	<code>
+		GET <a href="'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm">'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm</a>
+	</code>
+</blockquote>
 <p>The response will be the encoded text, e.g.:</p>
 <blockquote>It sure is ‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot today</blockquote>
 <h2>Decoding</h2>
 <p>You can decode messages by passing the <code>decode</code> parameter, e.g.:</p>
-<blockquote><code>GET <a href="https://neatnik.net/steganographr/api?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today">https://neatnik.net/steganographr/api?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today</a></code></blockquote>
+<blockquote>
+	<code>
+		GET <a href="'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today">https://neatnik.net/steganographr/api?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today</a>
+	</code>
+</blockquote>
 <p>The response will be the private message, e.g.:</p>
-<blockquote>meet me behind the office at 4 pm</blockquote>
+<blockquote>
+	<code>
+		meet me behind the office at 4 pm
+	</code>
+</blockquote>
 <h2>Additional information</h2>
 <p>You can use an interactive version of the service at <a href="https://neatnik.net/steganographr/">https://neatnik.net/steganographr/</a>. If you have any questions, feel free to contact <a href="mailto:adam@neatnik.net">adam@neatnik.net</a>.</p>
 <hr>
@@ -71,20 +95,23 @@ if(!isset($_GET['decode']) && isset($_GET['private']) && !isset($_GET['public'])
 if(isset($_GET['public']) && strlen($_GET['public']) >= 2) {
 	
 	// Grab the public message string and break it up into characters
-	$public = $_GET['public'];
+	$public = $_REQUEST['public'];
 	$public = mb_str_split($public);
 	
 	// Find the half-way point in the string
 	$half = round(count($public) / 2);
 	
 	// Grab the private message
-	$private = $_GET['private'];
+	$private = $_REQUEST['private'];
 	
 	// Convert it to binary data
-	$str = str2bin($private);
+	$private = str2bin($private);
 	
 	// And convert that into a string of zero-width characters
-	$private = bin2hidden($str);
+	$private = bin2hidden($private);
+	
+	// Finally, wrap it with a distinct boundary character
+	$private = wrap($private);
 	
 	// Inject the encoded private message into the approximate half-way point in the public string
 	$i = 0;
@@ -117,7 +144,16 @@ else if(isset($_GET['public'])) {
 
 if(isset($_GET['decode'])) {
 	// Unhide the message
-	$message = bin2str(hidden2bin($_GET['decode']));
+	$unwrapped = unwrap($_REQUEST['decode']);
+	
+	// If it's not wrapped, process the full string as received
+	if(!$unwrapped) {
+		$message = bin2str(hidden2bin($_REQUEST['decode']));
+	}
+	// Otherwise, process only the unwrapped string
+	else {
+		$message = bin2str(hidden2bin($unwrapped));
+	}
 	
 	// Display the hidden private message
 	if(strlen($message) < 2) {

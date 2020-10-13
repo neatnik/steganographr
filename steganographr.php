@@ -49,6 +49,18 @@ function str2bin($text){
     return implode(' ', $bin);
 }
 
+// Wrap a string with a distinct boundary
+function wrap($string) {
+    return "\xEF\xBB\xBF".$string."\xEF\xBB\xBF"; // Unicode Character 'ZERO WIDTH NON-BREAKING SPACE' (U+FEFF) 0xEF 0xBB 0xBF
+}
+
+// Unwrap a string if the distinct boundary exists
+function unwrap($string) {
+    $tmp = explode("\xEF\xBB\xBF", $string);
+    if(count($tmp) == 1) return false; // If the string doesn't contain the boundary, return false
+    return $tmp[1]; // Otherwise, return the unwrapped string
+}
+
 // Convert binary data into a string
 function bin2str($bin){
     $text = array();
@@ -83,6 +95,38 @@ function hidden2bin($str) {
 <meta property="og:url" content="https://neatnik.net/steganographr/">
 <meta property="og:description" content="Hide text in plain sight using invisible zero-width characters. Digital steganography made simple.">
 <title>Steganographr</title>
+<style>
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+    html { font-family: 'Inter var', sans-serif; }
+}
+body {
+    margin: 2em 4em;
+}
+label {
+    font-weight: bold;
+    display: block;
+}
+form {
+    margin: 2em 0;
+}
+fieldset {
+    border: 1px solid #777;
+    padding: 1em 2em;
+    border-radius: 0.2em;
+}
+legend {
+    font-size: 150%;
+    font-weight: bold;
+    padding: 0 .5em;
+}
+textarea {
+    width: 100%;
+    height: 4.4em;
+    margin-bottom: 1em;
+}
+</style>
 </head>
 <body>
 
@@ -92,7 +136,7 @@ function hidden2bin($str) {
 
 <p>Hide text in plain sight using invisible zero-width characters. It’s digital steganography made simple. Inspired by <a href="https://www.zachaysan.com/writing/2017-12-30-zero-width-characters">Zach Aysan</a>.</p>
 
-<p>Enter a public message, then a private message, and then click the button to hide your private message within your public message. If you’ve received a public message, you can reveal the private message here as well. <a href="#about">How does it work?</a></p>
+<p>Enter a public message, then a private message, and then click the button to hide your private message within your public message. If you’ve received a public message, you can reveal the private message here as well.</p>
 
 <section>
 
@@ -144,10 +188,13 @@ if(isset($_POST['public'])) {
     $private = $_POST['private'];
     
     // Convert it to binary data
-    $str = str2bin($private);
+    $private = str2bin($private);
     
     // And convert that into a string of zero-width characters
-    $private = bin2hidden($str);
+    $private = bin2hidden($private);
+    
+    // Finally, wrap it with a distinct boundary character
+    $private = wrap($private);
     
     // Inject the encoded private message into the approximate half-way point in the public string
     $i = 0;
@@ -176,9 +223,19 @@ if(isset($_POST['public'])) {
 }
 
 if(isset($_POST['encoded'])) {
-    // Unhide the message
-    $message = bin2str(hidden2bin($_POST['encoded']));
     
+    // Unhide the message
+    $unwrapped = unwrap($_POST['encoded']);
+    
+    // If it's not wrapped, process the full string as received
+    if(!$unwrapped) {
+        $message = bin2str(hidden2bin($_POST['encoded']));
+    }
+    // Otherwise, process only the unwrapped string
+    else {
+        $message = bin2str(hidden2bin($unwrapped));
+    }
+      
     // Display the hidden private message
     echo '<section class="notice"><h2>Private Message</h2>';
     if(strlen($message) < 2) {
@@ -187,7 +244,6 @@ if(isset($_POST['encoded'])) {
     else {
         echo '<p style="font-weight: bold;">'.htmlentities($message).'</p>';
     }
-    echo '</section>';
 }
 
 ?>
@@ -201,6 +257,7 @@ if(isset($_POST['encoded'])) {
     <li>WORD JOINER (U+2060)</li>
     <li>ZERO WIDTH SPACE (U+200B)</li>
     <li>ZERO WIDTH NON-JOINER (U+200C)</li>
+    <li>ZERO WIDTH NON-BREAKING SPACE (U+FEFF)</li>
 </ul>
 </section>
 
