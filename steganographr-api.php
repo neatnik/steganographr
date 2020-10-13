@@ -89,12 +89,18 @@ if(isset($_GET['public']) && strlen($_GET['public']) >= 2) {
 	// Inject the encoded private message into the approximate half-way point in the public string
 	$i = 0;
 	$tmp = array();
-	foreach($public as $char) {
-		if($i == $half) {
-			$tmp[] = $private;
+	if(count($public == 1)) {
+		$tmp[0] = $public[0];
+		$tmp[1] = $private;
+	}
+	else {
+		foreach($public as $char) {
+			if($i == $half) {
+				$tmp[] = $private;
+			}
+			$tmp[] = $char;
+			$i++;
 		}
-		$tmp[] = $char;
-		$i++;
 	}
 	
 	// Reassemble the public string
