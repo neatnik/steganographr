@@ -135,7 +135,7 @@ if(isset($_POST['public'])) {
     
     // Grab the public message string and break it up into characters
     $public = $_POST['public'];
-    $public = str_split($public);
+    $public = mb_str_split($public);
     
     // Find the half-way point in the string
     $half = round(count($public) / 2);
@@ -150,10 +150,18 @@ if(isset($_POST['public'])) {
     $private = bin2hidden($str);
     
     // Inject the encoded private message into the approximate half-way point in the public string
-    $public[$half] = $public[$half].$private;
+    $i = 0;
+    $tmp = array();
+    foreach($public as $char) {
+        if($i == $half) {
+            $tmp[] = $private;
+        }
+        $tmp[] = $char;
+        $i++;
+    }
     
     // Reassemble the public string
-    $public = implode('', $public);
+    $public = implode('', $tmp);
     
     // Display a <textarea> containing the public message with the hidden private embedded
     echo '<textarea style="height: 5em;">'.$public.'</textarea>';

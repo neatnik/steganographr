@@ -14,7 +14,7 @@ function str2bin($text){
 function bin2str($bin){
 	$text = array();
 	$bin = explode(' ', $bin);
-	for($i=0; count($bin)>$i; $i++)
+	for($i=0; count($bin)>$i; $i++) 
 		$text[] = chr(@bindec($bin[$i]));
 	return implode($text);
 }
@@ -72,7 +72,7 @@ if(isset($_GET['public']) && strlen($_GET['public']) >= 2) {
 	
 	// Grab the public message string and break it up into characters
 	$public = $_GET['public'];
-	$public = str_split($public);
+	$public = mb_str_split($public);
 	
 	// Find the half-way point in the string
 	$half = round(count($public) / 2);
@@ -87,10 +87,18 @@ if(isset($_GET['public']) && strlen($_GET['public']) >= 2) {
 	$private = bin2hidden($str);
 	
 	// Inject the encoded private message into the approximate half-way point in the public string
-	$public[$half] = $public[$half].$private;
+	$i = 0;
+	$tmp = array();
+	foreach($public as $char) {
+		if($i == $half) {
+			$tmp[] = $private;
+		}
+		$tmp[] = $char;
+		$i++;
+	}
 	
 	// Reassemble the public string
-	$public = implode('', $public);
+	$public = implode('', $tmp);
 	
 	die($public);
 	
