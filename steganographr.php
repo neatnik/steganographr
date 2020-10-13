@@ -46,7 +46,7 @@ function str2bin($text){
     $bin = array();
     for($i=0; strlen($text)>$i; $i++)
         $bin[] = decbin(ord($text[$i]));
-    return implode(' ',$bin);
+    return implode(' ', $bin);
 }
 
 // Convert binary data into a string
@@ -152,7 +152,7 @@ if(isset($_POST['public'])) {
     // Inject the encoded private message into the approximate half-way point in the public string
     $i = 0;
     $tmp = array();
-    if(count($public == 1)) {
+    if(count($public) == 1) {
         $tmp[0] = $public[0];
         $tmp[1] = $private;
     }
