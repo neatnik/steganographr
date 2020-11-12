@@ -155,6 +155,9 @@ if(isset($_GET['decode'])) {
 		$message = bin2str(hidden2bin($unwrapped));
 	}
 	
+	// If encoded ampersands are present, convert them to regular ampersands
+	$message = str_replace('&amp;', '&', $message);
+	
 	// Display the hidden private message
 	if(strlen($message) < 2) {
 		die('<strong>Notice:</strong> No private message was found.');
