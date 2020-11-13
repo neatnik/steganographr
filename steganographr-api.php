@@ -57,7 +57,7 @@ if(!isset($_GET['public']) && !isset($_GET['private']) && !isset($_GET['decode']
 <p>You can encode messages by passing both <code>public</code> and <code>private</code> parameters, e.g.:</p>
 <blockquote>
 	<code>
-		GET <a href="'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm">'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm</a>
+		GET <a href="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm">https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?public=It+sure+is+hot+today&private=meet+me+behind+the+office+at+4+pm</a>
 	</code>
 </blockquote>
 <p>The response will be the encoded text, e.g.:</p>
@@ -66,7 +66,7 @@ if(!isset($_GET['public']) && !isset($_GET['private']) && !isset($_GET['decode']
 <p>You can decode messages by passing the <code>decode</code> parameter, e.g.:</p>
 <blockquote>
 	<code>
-		GET <a href="'.$_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today">https://neatnik.net/steganographr/api?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today</a>
+		GET <a href="https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].'?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today">https://neatnik.net/steganographr/api?decode=It+sure+is+‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌‌​​‌​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌‌​‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​‌​⁠‌‌​​‌​‌⁠‌‌​‌​​​⁠‌‌​‌​​‌⁠‌‌​‌‌‌​⁠‌‌​​‌​​⁠‌​​​​​⁠‌‌‌​‌​​⁠‌‌​‌​​​⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​‌‌‌‌⁠‌‌​​‌‌​⁠‌‌​​‌‌​⁠‌‌​‌​​‌⁠‌‌​​​‌‌⁠‌‌​​‌​‌⁠‌​​​​​⁠‌‌​​​​‌⁠‌‌‌​‌​​⁠‌​​​​​⁠‌‌​‌​​⁠‌​​​​​⁠‌‌‌​​​​⁠‌‌​‌‌​‌hot+today</a>
 	</code>
 </blockquote>
 <p>The response will be the private message, e.g.:</p>
