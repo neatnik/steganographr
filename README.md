@@ -6,7 +6,7 @@ You can view a live demo of the tool at https://neatnik.net/steganographr/.
 
 ## How it works
 
-Steganographr works by hiding a private message within a public message. The private message is converted into binary data, and then that binary data is further converted into zero-width characters (which are then hidden withinin your public message in an “invisible” manner).
+Steganographr works by converting your private message into binary data, and then converting that binary data into zero-width characters (which can then be hidden in your public message).
 
 These characters are used:
 
