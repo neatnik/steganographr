@@ -78,7 +78,7 @@ if(!isset($_GET['public']) && !isset($_GET['private']) && !isset($_GET['decode']
 <h2>Additional information</h2>
 <p>You can use an interactive version of the service at <a href="https://neatnik.net/steganographr/">https://neatnik.net/steganographr/</a>. If you have any questions, feel free to contact <a href="mailto:adam@neatnik.net">adam@neatnik.net</a>.</p>
 <hr>
-<em>Last modified: '.date("r", filemtime(__FILE__)).'</em>
+<em>Last updated: '.date("r", filemtime(__FILE__)).'</em>
 
 ';
 	exit;
